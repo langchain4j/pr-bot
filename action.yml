@@ -37,7 +37,7 @@ runs:
       uses: jbangdev/setup-jbang@main
     - name: Run the action
       id: action
-      run: jbang --java 17 --fresh --repos 'quarkus-github-action=https://maven.pkg.github.com/langchain4j/pr-bot/' --repos 'mavencentral' dev.langchain4j:pr-bot:999-SNAPSHOT
+      run: jbang --verbose --java 17 --fresh --repos 'quarkus-github-action=https://maven.pkg.github.com/langchain4j/pr-bot/' --repos 'mavencentral' dev.langchain4j:pr-bot:999-SNAPSHOT
       shell: bash
       env:
         JSON_INPUTS: ${{ toJSON(inputs) }}
