@@ -19,5 +19,9 @@ jobs:
           java-version: 17
           distribution: temurin
           cache: maven
+
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+
       - name: Build
         run: ./mvnw -B clean verify -Dquarkus.package.type=uber-jar -Dquarkus.package.add-runner-suffix=false
