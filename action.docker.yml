@@ -1,0 +1,9 @@
+name: 'PR Bot'
+description: 'PR Bot'
+inputs:
+  github-token:
+    description: 'GitHub token'
+    required: false
+runs:
+  using: 'docker'
+  image: 'docker://ghcr.io/langchain4j/pr-bot:main'
