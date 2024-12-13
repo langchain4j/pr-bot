@@ -1,7 +1,7 @@
 package dev.langchain4j;
 
 import io.quarkiverse.githubaction.Action;
-import io.quarkiverse.githubapp.event.PullRequest;
+import io.quarkiverse.githubapp.event.PullRequestTarget;
 import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHPullRequest;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ public class MyAction {
     private static final Logger LOG = LoggerFactory.getLogger(MyAction.class);
 
     @Action
-    void action(@PullRequest GHEventPayload.PullRequest pullRequest) throws IOException {
+    void action(@PullRequestTarget GHEventPayload.PullRequest pullRequest) throws IOException {
         GHPullRequest pr = pullRequest.getPullRequest();
 
         LOG.info("Repository: " + pr.getRepository().getFullName());
