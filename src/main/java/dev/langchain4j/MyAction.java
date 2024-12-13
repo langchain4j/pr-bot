@@ -14,9 +14,13 @@ public class MyAction {
     void action(@PullRequestTarget GHEventPayload.PullRequest pullRequest, Commands commands) throws IOException {
         GHPullRequest pr = pullRequest.getPullRequest();
 
-        commands.notice("getChanges().getTitle(): " + pullRequest.getChanges().getTitle());
-        commands.notice("getChanges().getBody(): " + pullRequest.getChanges().getBody());
-        commands.notice("getChanges().getBase(): " + pullRequest.getChanges().getBase());
+
+
+        commands.notice("pr.getPatchUrl(): " + pr.getPatchUrl());
+        commands.notice("pr.getUrl(): " + pr.getUrl());
+        commands.notice("pr.getHtmlUrl(): " + pr.getHtmlUrl());
+        commands.notice("pr.getDiffUrl(): " + pr.getDiffUrl());
+        commands.notice("pr.getIssueUrl(): " + pr.getIssueUrl());
 
         commands.notice("getSender: " + pullRequest.getSender());
         commands.notice("pr.getTitle(): " + pr.getTitle());
