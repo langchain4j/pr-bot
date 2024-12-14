@@ -20,11 +20,11 @@ import static dev.langchain4j.model.chat.request.ResponseFormat.JSON;
 public class MyAction {
 
     static ChatLanguageModel MODEL = GoogleAiGeminiChatModel.builder()
-            .apiKey(System.getenv("GOOGLE_AI_GEMINI_API_KEY"))
-            .modelName("gemini-2.0-flash-exp")
+            .apiKey(System.getenv("GOOGLE_AI_GEMINI_API_KEY")) // TODO get from action inputs?
+            .modelName("gemini-2.0-flash-exp") // TODO get from action inputs?
             .responseFormat(JSON)
-            .temperature(0.0)
-            .logRequestsAndResponses(true)
+            .temperature(0.0) // TODO get from action inputs?
+            .logRequestsAndResponses(true) // TODO get from action inputs?
             .build();
 
     static DiffAnalyzer DIFF_ANALYZER = AiServices.builder(DiffAnalyzer.class)
@@ -35,6 +35,8 @@ public class MyAction {
     void action(@PullRequestTarget GHEventPayload.PullRequest pullRequest, Commands commands) throws IOException {
         GHPullRequest pr = pullRequest.getPullRequest();
 
+        commands.notice("pullRequest.getChanges(): " + pullRequest.getChanges());
+
         commands.notice("pr.getPatchUrl(): " + pr.getPatchUrl());
         commands.notice("pr.getUrl(): " + pr.getUrl());
         commands.notice("pr.getHtmlUrl(): " + pr.getHtmlUrl());
@@ -43,6 +45,7 @@ public class MyAction {
 
         commands.notice("getSender: " + pullRequest.getSender());
         commands.notice("pr.getTitle(): " + pr.getTitle());
+        commands.notice("pr.getBody(): " + pr.getBody());
 
         String diff = getContents(pr.getDiffUrl());
 
