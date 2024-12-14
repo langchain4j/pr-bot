@@ -48,8 +48,10 @@ public class MyAction {
         commands.notice("pr.getTitle(): " + pr.getTitle());
         commands.notice("pr.getBody(): " + pr.getBody());
 
-        String diff = getContents(pr.getDiffUrl());
-        commands.notice("diff: " + diff);
+//        String diff = getContents(pr.getDiffUrl());
+//        commands.notice("diff: " + diff);
+
+        StringBuilder diff = new StringBuilder();
 
         for (GHPullRequestFileDetail file : pr.listFiles()) {
             commands.notice("file.getFilename():  " + file.getFilename());
@@ -59,9 +61,11 @@ public class MyAction {
             commands.notice("file.getBlobUrl():  " + file.getBlobUrl());
             commands.notice("file.getRawUrl():  " + file.getRawUrl());
             commands.notice("file.getPreviousFilename():  " + file.getPreviousFilename());
+            diff.append("Changes in ").append(file.getFilename()).append(":").append("\n");
+            diff.append(file.getPatch()).append("\n\n");
         }
 
-        Result result = DIFF_ANALYZER.analyze(diff);
+        Result result = DIFF_ANALYZER.analyze(diff.toString());
         commands.notice("result: " + result);
 
         if (result.containsProductionCodeChanges() && !result.containsTestCodeChanges()) {
