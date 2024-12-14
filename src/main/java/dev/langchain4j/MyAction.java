@@ -1,8 +1,7 @@
 package dev.langchain4j;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import dev.langchain4j.model.chat.response.ChatResponse;
-import dev.langchain4j.model.openai.OpenAiChatModel;
+import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.service.AiServices;
 import io.quarkiverse.githubaction.Action;
 import io.quarkiverse.githubaction.Commands;
@@ -16,20 +15,16 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
+import static dev.langchain4j.model.chat.request.ResponseFormat.JSON;
 
 public class MyAction {
 
-    static ChatLanguageModel MODEL = OpenAiChatModel.builder()
-            .baseUrl(System.getenv("OPENAI_BASE_URL"))
-            .apiKey(System.getenv("OPENAI_API_KEY"))
-            .organizationId(System.getenv("OPENAI_ORGANIZATION_ID"))
-            .modelName(GPT_4_O_MINI)
-            .responseFormat("json_schema")
-            .strictJsonSchema(true)
+    static ChatLanguageModel MODEL = GoogleAiGeminiChatModel.builder()
+            .apiKey(System.getenv("GOOGLE_AI_GEMINI_API_KEY"))
+            .modelName("gemini-2.0-flash-exp")
+            .responseFormat(JSON)
             .temperature(0.0)
-            .logRequests(true)
-            .logResponses(true)
+            .logRequestsAndResponses(true)
             .build();
 
     static DiffAnalyzer DIFF_ANALYZER = AiServices.builder(DiffAnalyzer.class)
@@ -59,7 +54,6 @@ public class MyAction {
             pr.comment("Hi @" + userHandle + ", thanks a lot for your PR!\n" +
                     "It seems that tests are missing, could you please add them?");
         }
-
     }
 
     static String getContents(URL url) {
