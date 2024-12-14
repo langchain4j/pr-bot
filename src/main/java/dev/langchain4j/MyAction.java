@@ -47,6 +47,7 @@ public class MyAction {
         String diff = getContents(pr.getDiffUrl());
 
         Result result = DIFF_ANALYZER.analyze(diff);
+        commands.notice("result: " + result);
 
         if (result.containsChangesToProductionCode()
                 && !result.changesToProductionCodeAreCoveredWithTests()) {
