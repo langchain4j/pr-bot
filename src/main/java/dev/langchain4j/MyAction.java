@@ -48,11 +48,12 @@ public class MyAction {
         commands.notice("pr.getBody(): " + pr.getBody());
 
         String diff = getContents(pr.getDiffUrl());
+        commands.notice("diff: " + diff);
 
         Result result = DIFF_ANALYZER.analyze(diff);
         commands.notice("result: " + result);
 
-        if (result.containsProductionCodeChanges() && !result.containsTestChanges()) {
+        if (result.containsProductionCodeChanges() && !result.containsTestCodeChanges()) {
             String userHandle = pullRequest.getSender().getLogin();
             pr.comment("Hi @" + userHandle + ", thanks a lot for your PR!\n" +
                     "It seems that tests are missing, could you please add them?");
