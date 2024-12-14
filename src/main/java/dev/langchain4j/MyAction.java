@@ -9,7 +9,6 @@ import io.quarkiverse.githubapp.event.PullRequestTarget;
 import org.kohsuke.github.GHEventPayload;
 import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHPullRequestFileDetail;
-import org.kohsuke.github.PagedIterable;
 
 import java.io.IOException;
 import java.net.URL;
@@ -53,7 +52,13 @@ public class MyAction {
         commands.notice("diff: " + diff);
 
         for (GHPullRequestFileDetail file : pr.listFiles()) {
-            commands.notice("file: " + file);
+            commands.notice("file.getFilename():  " + file.getFilename());
+            commands.notice("file.getStatus():  " + file.getStatus());
+            commands.notice("file.getPatch():  " + file.getPatch());
+            commands.notice("file.getContentsUrl():  " + file.getContentsUrl());
+            commands.notice("file.getBlobUrl():  " + file.getBlobUrl());
+            commands.notice("file.getRawUrl():  " + file.getRawUrl());
+            commands.notice("file.getPreviousFilename():  " + file.getPreviousFilename());
         }
 
         Result result = DIFF_ANALYZER.analyze(diff);
