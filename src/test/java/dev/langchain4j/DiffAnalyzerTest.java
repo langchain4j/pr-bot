@@ -1,10 +1,14 @@
 package dev.langchain4j;
 
+import org.junit.jupiter.api.RepeatedTest;
+
 import static dev.langchain4j.MyAction.DIFF_ANALYZER;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class DiffAnalyzerTest {
 
-    public static void main(String[] args) {
+    @RepeatedTest(10)
+    void test() {
 
         String diff = """
                 diff --git a/.github/workflows/pr-bot.yaml b/.github/workflows/pr-bot.yaml
@@ -36,6 +40,6 @@ class DiffAnalyzerTest {
 
         Result result = DIFF_ANALYZER.analyze(diff);
 
-        System.out.println(result);
+        assertThat(result).isEqualTo(new Result(true, false));
     }
 }

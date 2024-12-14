@@ -49,8 +49,7 @@ public class MyAction {
         Result result = DIFF_ANALYZER.analyze(diff);
         commands.notice("result: " + result);
 
-        if (result.containsChangesToProductionCode()
-                && !result.changesToProductionCodeAreCoveredWithTests()) {
+        if (result.containsProductionCodeChanges() && !result.containsTestChanges()) {
             String userHandle = pullRequest.getSender().getLogin();
             pr.comment("Hi @" + userHandle + ", thanks a lot for your PR!\n" +
                     "It seems that tests are missing, could you please add them?");
