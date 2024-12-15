@@ -1,13 +1,11 @@
 package dev.langchain4j;
 
-import org.junit.jupiter.api.RepeatedTest;
-
 import static dev.langchain4j.MyAction.DIFF_ANALYZER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class DiffAnalyzerTest {
 
-//    @RepeatedTest(10)
+    //    @RepeatedTest(10)
     void test() {
 
         String diff = """
@@ -27,8 +25,9 @@ class DiffAnalyzerTest {
                      );
                 """;
 
-        Result result = DIFF_ANALYZER.analyze(diff);
+        Result result = DIFF_ANALYZER.analyze("", "", diff);
 
-        assertThat(result).isEqualTo(new Result(true, false));
+        assertThat(result.containsProductionCodeChanges()).isTrue();
+        assertThat(result.containsTestCodeChanges()).isFalse();
     }
 }
