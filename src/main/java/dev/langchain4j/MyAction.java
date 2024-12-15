@@ -11,10 +11,6 @@ import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHPullRequestFileDetail;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 import static dev.langchain4j.model.chat.request.ResponseFormat.JSON;
@@ -28,9 +24,11 @@ public class MyAction {
     private static final String MAJOR = "\uD83D\uDD25";
     private static final String CRITICAL = "\uD83D\uDEA8";
 
+    private static final String MODEL_NAME = "gemini-2.0-flash-exp";
+
     static ChatLanguageModel MODEL = GoogleAiGeminiChatModel.builder()
             .apiKey(System.getenv("GOOGLE_AI_GEMINI_API_KEY")) // TODO get from action inputs?
-            .modelName("gemini-2.0-flash-exp") // TODO get from action inputs?
+            .modelName(MODEL_NAME) // TODO get from action inputs?
             .responseFormat(JSON)
             .temperature(0.0) // TODO get from action inputs?
             .logRequestsAndResponses(true) // TODO get from action inputs?
@@ -79,27 +77,32 @@ public class MyAction {
 
         StringBuilder commentBuilder = new StringBuilder();
 
-        commentBuilder.append("Hi @").append(userHandle).append(", thanks a lot for your PR! ");
-        commentBuilder.append("I'm a bot, here is an initial analysis of your PR:")
+        commentBuilder.append("Hi @").append(userHandle).append(", thank you very much for your PR! ❤\uFE0F")
+                .append("\n")
+                .append("I'm a bot powered by Google AI Gemini ").append(MODEL_NAME)
+                .append(".\n")
+                .append("The maintainers of LangChain4j will perform a thorough code review as soon as they can, ")
+                .append("but in the meantime, here’s a preliminary review from me. I hope you find it helpful.")
                 .append("\n\n");
 
-        commentBuilder.append("## Potential Issues").append("\n\n");
+
+        commentBuilder.append("### Potential Issues").append("\n\n");
         addPotentialProblems(commentBuilder, result.potentialBreakingChanges(), "Breaking Changes");
         addPotentialProblems(commentBuilder, result.potentialDesignIssues(), "Design Issues");
         addPotentialProblems(commentBuilder, result.potentialBugs(), "Bugs");
 
-        commentBuilder.append("## Testing").append("\n\n");
-        addTestScenarios(commentBuilder, result.positiveTestScenarios(), "Positive");
-        addTestScenarios(commentBuilder, result.negativeTestScenarios(), "Negative");
-        addTestScenarios(commentBuilder, result.cornerCaseTestScenarios(), "Corner Case");
 
-        commentBuilder.append("Your PR contains production code changes: ")
-                .append(result.containsProductionCodeChanges() ? YES : NO)
-                .append("\n\n");
+        commentBuilder.append("### Testing").append("\n\n");
         commentBuilder
                 .append("Changes in this PR are sufficiently tested: ")
                 .append(result.changesAreSufficientlyTested() ? YES : NO)
                 .append("\n");
+        addTestScenarios(commentBuilder, result.positiveTestScenarios(), "Positive");
+        addTestScenarios(commentBuilder, result.negativeTestScenarios(), "Negative");
+        addTestScenarios(commentBuilder, result.cornerCaseTestScenarios(), "Corner Case");
+
+
+        commentBuilder.append("### Documentation").append("\n\n");
         commentBuilder
                 .append("Changes in this PR are sufficiently documented: ")
                 .append(result.changesAreSufficientlyDocumented() ? YES : NO)
@@ -112,7 +115,7 @@ public class MyAction {
                                              List<PotentialProblem> potentialProblems,
                                              String title) {
         if (!potentialProblems.isEmpty()) {
-            commentBuilder.append("### Potential ").append(title).append("\n");
+            commentBuilder.append("#### Potential ").append(title).append("\n");
             for (PotentialProblem potentialProblem : potentialProblems) {
                 commentBuilder
                         .append("- ")
@@ -129,7 +132,7 @@ public class MyAction {
                                          List<TestScenario> testScenarios,
                                          String title) {
         if (!testScenarios.isEmpty()) {
-            commentBuilder.append("### Suggested ").append(title).append(" Test Scenarios").append("\n");
+            commentBuilder.append("#### Suggested ").append(title).append(" Test Scenarios").append("\n");
             for (TestScenario testScenario : testScenarios) {
                 commentBuilder
                         .append("-").append("\n")
@@ -149,19 +152,5 @@ public class MyAction {
             case MAJOR -> MAJOR;
             case CRITICAL -> CRITICAL;
         };
-    }
-
-    static String getContents(URL url) {
-        try {
-            HttpClient httpClient = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .GET()
-                    .uri(url.toURI())
-                    .build();
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            return response.body();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
