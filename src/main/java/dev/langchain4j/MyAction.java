@@ -20,8 +20,7 @@ public class MyAction {
     private static final String YES = "✅";
     private static final String NO = "❌";
 
-    private static final String MEDIUM = "⚠\uFE0F";
-    private static final String MAJOR = "\uD83D\uDD25";
+    private static final String MAJOR = "⚠\uFE0F";
     private static final String CRITICAL = "\uD83D\uDEA8";
 
     private static final String MODEL_NAME = "gemini-2.0-flash-exp";
@@ -147,8 +146,7 @@ public class MyAction {
 
     static String map(Severity severity) {
         return switch (severity) {
-            case MINOR -> "";
-            case MEDIUM -> MEDIUM;
+            case MINOR, MEDIUM -> "";
             case MAJOR -> MAJOR;
             case CRITICAL -> CRITICAL;
         };
