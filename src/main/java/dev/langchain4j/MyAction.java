@@ -69,10 +69,17 @@ public class MyAction {
         String diff = diffBuilder.toString();
         commands.notice("diff: " + diff);
 
+        String userHandle = pullRequest.getSender().getLogin();
+        commands.notice("userHandle: " + userHandle);
+
+        if (userHandle.toLowerCase().contains("renovate") || userHandle.toLowerCase().contains("dependabot")) {
+            commands.notice("Skipping PR from a bot");
+            return;
+        }
+
+
         Result result = DIFF_ANALYZER.analyze(pr.getTitle(), pr.getBody(), diff);
         commands.notice("result: " + result);
-
-        String userHandle = pullRequest.getSender().getLogin();
 
         StringBuilder commentBuilder = new StringBuilder();
 
