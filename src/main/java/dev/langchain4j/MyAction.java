@@ -6,9 +6,7 @@ import dev.langchain4j.service.AiServices;
 import io.quarkiverse.githubaction.Action;
 import io.quarkiverse.githubaction.Commands;
 import io.quarkiverse.githubapp.event.PullRequestTarget;
-import org.kohsuke.github.GHEventPayload;
-import org.kohsuke.github.GHPullRequest;
-import org.kohsuke.github.GHPullRequestFileDetail;
+import org.kohsuke.github.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -115,6 +113,18 @@ public class MyAction {
                 .append("\n");
 
         pr.comment(commentBuilder.toString());
+
+        for (GHIssueComment comment : pr.getComments()) {
+            commands.notice("=======================================================");
+            commands.notice("comment: " + comment.getBody().substring(0, 50) + "...");
+            GHUser user = comment.getUser();
+            if (user != null) {
+                commands.notice("comment user: " + user);
+                if ("github-actions".equals(user.getLogin())) {
+                    comment.update("REDACTED");
+                }
+            }
+        }
     }
 
     private static void addPotentialProblems(StringBuilder commentBuilder,
