@@ -120,8 +120,12 @@ public class MyAction {
             GHUser user = comment.getUser();
             if (user != null) {
                 commands.notice("comment user: " + user);
-                if ("github-actions".equals(user.getLogin())) {
-                    comment.update("REDACTED");
+                if ("github-actions[bot]".equals(user.getLogin()) && !comment.getBody().startsWith("<details>")) {
+                    comment.update("<details>\n" +
+                            "<summary>Click here to view this outdated comment. Please see my most recent comment below.</summary>\n" +
+                            comment.getBody() + "\n" +
+                            "</details>"
+                    );
                 }
             }
         }
