@@ -112,8 +112,12 @@ public class MyAction {
                 .append(result.changesAreSufficientlyDocumented() ? YES : NO)
                 .append("\n");
 
-        pr.comment(commentBuilder.toString());
+        collapseOutdatedComments(commands, pr);
 
+        pr.comment(commentBuilder.toString());
+    }
+
+    private static void collapseOutdatedComments(Commands commands, GHPullRequest pr) throws IOException {
         for (GHIssueComment comment : pr.getComments()) {
             commands.notice("=======================================================");
             commands.notice("comment: " + comment.getBody().substring(0, 50) + "...");
