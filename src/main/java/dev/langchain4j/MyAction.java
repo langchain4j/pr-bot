@@ -120,7 +120,7 @@ public class MyAction {
     private static void collapseOutdatedComments(Commands commands, GHPullRequest pr) throws IOException {
         for (GHIssueComment comment : pr.getComments()) {
             commands.notice("=======================================================");
-            commands.notice("comment: " + comment.getBody().substring(0, 50) + "...");
+            commands.notice("comment: " + shorten(comment.getBody()) + "...");
             GHUser user = comment.getUser();
             if (user != null) {
                 commands.notice("comment user: " + user);
@@ -132,6 +132,14 @@ public class MyAction {
                     );
                 }
             }
+        }
+    }
+
+    private static String shorten(String s) {
+        if (s != null && s.length() > 20) {
+            return s.substring(0, 20);
+        } else {
+            return s;
         }
     }
 
