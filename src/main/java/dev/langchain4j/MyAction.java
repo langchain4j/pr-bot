@@ -101,9 +101,9 @@ public class MyAction {
                 .append("Changes in this PR are sufficiently tested: ")
                 .append(result.changesAreSufficientlyTested() ? YES : NO)
                 .append("\n");
-        addTestScenarios(commentBuilder, result.positiveTestScenarios(), "Positive");
-        addTestScenarios(commentBuilder, result.negativeTestScenarios(), "Negative");
-        addTestScenarios(commentBuilder, result.cornerCaseTestScenarios(), "Corner Case");
+//        addTestScenarios(commentBuilder, result.positiveTestScenarios(), "Positive");
+//        addTestScenarios(commentBuilder, result.negativeTestScenarios(), "Negative");
+//        addTestScenarios(commentBuilder, result.cornerCaseTestScenarios(), "Corner Case");
 
 
         commentBuilder.append("### Documentation").append("\n\n");
@@ -112,24 +112,20 @@ public class MyAction {
                 .append(result.changesAreSufficientlyDocumented() ? YES : NO)
                 .append("\n");
 
-        collapseOutdatedComments(commands, pr);
+        deletePreviousBotComments(commands, pr);
 
         pr.comment(commentBuilder.toString());
     }
 
-    private static void collapseOutdatedComments(Commands commands, GHPullRequest pr) throws IOException {
+    private static void deletePreviousBotComments(Commands commands, GHPullRequest pr) throws IOException {
         for (GHIssueComment comment : pr.getComments()) {
             commands.notice("=======================================================");
             commands.notice("comment: " + shorten(comment.getBody()) + "...");
             GHUser user = comment.getUser();
             if (user != null) {
                 commands.notice("comment user: " + user);
-                if ("github-actions[bot]".equals(user.getLogin()) && !comment.getBody().startsWith("<details>")) {
-                    comment.update("<details>\n" +
-                            "<summary>Click here to view this outdated comment. Please see my most recent comment below.</summary>\n" +
-                            comment.getBody() + "\n" +
-                            "</details>"
-                    );
+                if ("github-actions[bot]".equals(user.getLogin())) {
+                    comment.delete();
                 }
             }
         }

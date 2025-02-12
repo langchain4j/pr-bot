@@ -17,12 +17,12 @@ public record Result(
         @Description("What potential bugs this PR might introduce?")
         List<PotentialProblem> potentialBugs,
 
-        @Description("Suggest positive test scenarios related to the changes in this PR")
-        List<TestScenario> positiveTestScenarios,
-        @Description("Suggest negative test scenarios related to the changes in this PR")
-        List<TestScenario> negativeTestScenarios,
-        @Description("Suggest corner case test scenarios related to the changes in this PR")
-        List<TestScenario> cornerCaseTestScenarios,
+//        @Description("Suggest positive test scenarios related to the changes in this PR")
+//        List<TestScenario> positiveTestScenarios,
+//        @Description("Suggest negative test scenarios related to the changes in this PR")
+//        List<TestScenario> negativeTestScenarios,
+//        @Description("Suggest corner case test scenarios related to the changes in this PR")
+//        List<TestScenario> cornerCaseTestScenarios,
         @Description("Are changes in this PR sufficiently tested?")
         boolean changesAreSufficientlyTested,
 
